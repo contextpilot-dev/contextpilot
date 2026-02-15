@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/jitin-nhz/contextpilot/internal/analyzer"
+	"github.com/jitin-nhz/contextpilot/internal/decisions"
 )
 
 // Generator creates context files from analysis
@@ -153,7 +154,13 @@ func (g *Generator) renderCursorRules() string {
 {{- end}}
 
 ## Decisions
+{{- if .HasDecisions}}
+{{- range .Decisions}}
+- **{{.Date}}:** {{.Text}}
+{{- end}}
+{{- else}}
 <!-- Add architectural decisions with: contextpilot decision "Your decision here" -->
+{{- end}}
 
 ---
 *Managed by [ContextPilot](https://contextpilot.dev) • Run 'contextpilot sync' to update*
@@ -233,9 +240,16 @@ When writing code for this project:
 - **"Refactor"** → Maintain existing code style and conventions
 
 ## Decisions
+{{- if .HasDecisions}}
 
-<!-- Architectural decisions logged via ContextPilot -->
+Key architectural decisions for this project:
+{{- range .Decisions}}
+- **{{.Date}}:** {{.Text}}
+{{- end}}
+{{- else}}
+
 <!-- Add new decisions with: contextpilot decision "Your decision here" -->
+{{- end}}
 
 ---
 *Managed by [ContextPilot](https://contextpilot.dev) • Run 'contextpilot sync' to update*
@@ -325,6 +339,10 @@ ignore:
 }
 
 func (g *Generator) executeTemplate(tmplStr string) string {
+	// Get decisions
+	decMgr := decisions.New(g.rootPath)
+	decisionsList, _ := decMgr.List()
+	
 	// Prepare template data
 	data := struct {
 		*analyzer.Analysis
@@ -332,12 +350,16 @@ func (g *Generator) executeTemplate(tmplStr string) string {
 		LanguagesList   string
 		FoldersList     string
 		PrimaryLanguage string
+		Decisions       []decisions.Decision
+		HasDecisions    bool
 	}{
 		Analysis:        g.analysis,
 		Date:            time.Now().Format("2006-01-02"),
 		LanguagesList:   g.languagesList(),
 		FoldersList:     strings.Join(g.analysis.Structure.Folders, ", "),
 		PrimaryLanguage: g.primaryLanguage(),
+		Decisions:       decisionsList,
+		HasDecisions:    len(decisionsList) > 0,
 	}
 
 	tmpl, err := template.New("context").Parse(tmplStr)
