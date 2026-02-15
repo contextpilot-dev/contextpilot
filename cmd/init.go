@@ -6,6 +6,7 @@ import (
 	"sort"
 
 	"github.com/jitin-nhz/contextpilot/internal/analyzer"
+	"github.com/jitin-nhz/contextpilot/internal/generator"
 	"github.com/spf13/cobra"
 )
 
@@ -122,13 +123,30 @@ func runInit(cmd *cobra.Command, args []string) {
 		fmt.Println("Would generate:")
 		fmt.Println("   ├── .cursorrules")
 		fmt.Println("   ├── CLAUDE.md")
-		fmt.Println("   └── .github/copilot-instructions.md")
+		fmt.Println("   ├── .github/copilot-instructions.md")
+		fmt.Println("   └── .contextpilot/config.yaml")
 		return
 	}
 
-	// TODO: Generate context files based on analysis
-	fmt.Println("📝 Context file generation coming next!")
-	fmt.Println("   Run with --dry-run to preview without writing files")
+	// Generate context files
+	fmt.Println("📝 Generating context files...")
+	gen := generator.New(analysis, cwd)
+	if err := gen.GenerateAll(); err != nil {
+		fmt.Fprintf(os.Stderr, "❌ Error generating files: %v\n", err)
+		os.Exit(1)
+	}
+
+	fmt.Println("   ├── .cursorrules (Cursor)")
+	fmt.Println("   ├── CLAUDE.md (Claude Code)")
+	fmt.Println("   ├── .github/copilot-instructions.md (GitHub Copilot)")
+	fmt.Println("   └── .contextpilot/config.yaml (ContextPilot config)")
+	fmt.Println()
+	fmt.Println("✅ Done! Your AI tools now understand your codebase.")
+	fmt.Println()
+	fmt.Println("💡 Tips:")
+	fmt.Println("   • Review and customize the generated files")
+	fmt.Println("   • Run 'contextpilot sync' after major code changes")
+	fmt.Println("   • Log decisions with 'contextpilot decision \"...\"'")
 	fmt.Println()
 	fmt.Println("Star us: github.com/jitin-nhz/contextpilot")
 }
