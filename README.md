@@ -2,29 +2,26 @@
 
 **Make every AI tool understand your codebase.**
 
-ContextPilot generates and maintains AI context files (`.cursorrules`, `CLAUDE.md`, `copilot-instructions.md`) so your AI coding tools actually understand your project.
+ContextPilot generates and maintains AI context files (`.cursorrules`, `CLAUDE.md`, `copilot-instructions.md`) and tracks your work sessions so AI coding tools actually understand your project.
 
 ## The Problem
 
-AI coding assistants are powerful but stateless. They don't know:
-- Why you chose Postgres over MongoDB
-- Your team's coding conventions beyond linting
-- Architectural patterns specific to your codebase
+AI coding assistants are powerful but have two critical flaws:
 
-Context files fix this, but:
-- They go stale within weeks
-- New team members don't know they exist
-- Managing files for each tool is tedious
+1. **They don't know your codebase** — Your tech stack, conventions, patterns, architectural decisions
+2. **They forget your sessions** — Every new chat starts from zero, re-explaining everything
 
 ## The Solution
 
 ```bash
+# Generate context files from your codebase
 $ contextpilot init
 
 🔍 Analyzing codebase...
-   ├── Detected: TypeScript, React, Next.js
-   ├── Found: 47 components, 12 API routes, Prisma ORM
-   └── Patterns: Feature-based folders, custom hooks
+   ├── Framework: Next.js ^14.2.0
+   ├── Languages: TypeScript, JavaScript
+   ├── ORM: Prisma
+   └── Styling: Tailwind CSS
 
 📝 Generating context files...
    ├── .cursorrules (Cursor)
@@ -34,25 +31,49 @@ $ contextpilot init
 ✅ Done! Your AI tools now understand your codebase.
 ```
 
+```bash
+# Save your work session
+$ contextpilot save "Refactoring auth to use JWT"
+
+# Resume in any editor, any machine
+$ contextpilot resume
+✅ Session context copied to clipboard!
+```
+
 ## Installation
 
 ```bash
 # Coming soon!
 brew install contextpilot
 # or
-npm install -g contextpilot
+go install github.com/jitin-nhz/contextpilot@latest
 # or
-curl -fsSL https://contextpilot.dev/install.sh | sh
+npm install -g contextpilot
 ```
 
 ## Commands
 
+### Codebase Context
+
 | Command | Description |
 |---------|-------------|
-| `contextpilot init` | Generate context files for current project |
+| `contextpilot init` | Analyze codebase and generate context files |
 | `contextpilot sync` | Update context files after code changes |
 | `contextpilot decision "..."` | Log architectural decisions |
-| `contextpilot score` | Check your context quality |
+| `contextpilot score` | Check your context quality score |
+
+### Session Context
+
+| Command | Description |
+|---------|-------------|
+| `contextpilot save "task"` | Save current work session |
+| `contextpilot resume` | Restore session and copy to clipboard |
+
+### Integration
+
+| Command | Description |
+|---------|-------------|
+| `contextpilot mcp` | Start MCP server for AI tool integration |
 
 ## Quick Start
 
@@ -61,46 +82,92 @@ curl -fsSL https://contextpilot.dev/install.sh | sh
 cd my-project
 contextpilot init
 
-# 2. Review generated files
-cat .cursorrules
-cat CLAUDE.md
-
-# 3. Log decisions as you make them
+# 2. Log decisions as you make them
 contextpilot decision "Using Zustand for state management"
 
-# 4. Keep context fresh
-contextpilot sync  # Run after major changes
+# 3. Save your work session
+contextpilot save "Building user dashboard" --state "Table done, working on charts"
+
+# 4. Resume anytime (copies to clipboard)
+contextpilot resume
+
+# 5. Check context quality
+contextpilot score
 ```
+
+## MCP Server Integration
+
+ContextPilot includes a Model Context Protocol (MCP) server for native integration with Claude Code, Windsurf, and other AI tools.
+
+Add to your MCP config:
+
+```json
+{
+  "mcpServers": {
+    "contextpilot": {
+      "command": "contextpilot",
+      "args": ["mcp"],
+      "cwd": "/path/to/your/project"
+    }
+  }
+}
+```
+
+**Available MCP Tools:**
+- `contextpilot_save` — Save work session
+- `contextpilot_resume` — Get saved session
+- `contextpilot_sync` — Update context files
+- `contextpilot_decision` — Log decision
+- `contextpilot_score` — Get quality score
+
+**Available MCP Resources:**
+- `contextpilot://context` — Project context (CLAUDE.md)
+- `contextpilot://session` — Current work session
 
 ## Supported AI Tools
 
-- **Cursor** → `.cursorrules`
-- **Claude Code** → `CLAUDE.md`
-- **GitHub Copilot** → `.github/copilot-instructions.md`
-- **OpenClaw** → `CLAUDE.md` (same format)
+| Tool | Context File |
+|------|--------------|
+| Cursor | `.cursorrules` |
+| Claude Code | `CLAUDE.md` |
+| GitHub Copilot | `.github/copilot-instructions.md` |
+| OpenClaw | `CLAUDE.md` |
+| Windsurf | MCP server |
+
+## What Gets Detected
+
+- **Languages:** TypeScript, JavaScript, Python, Go, Rust, and more
+- **Frameworks:** Next.js, React, Vue, Express, FastAPI, etc.
+- **ORMs:** Prisma, Drizzle, TypeORM, Mongoose
+- **Testing:** Vitest, Jest, Mocha, pytest
+- **Styling:** Tailwind, Styled Components
+- **State:** Zustand, Redux, Jotai
+- **Tooling:** ESLint, Prettier, Biome
 
 ## Roadmap
 
-- [x] CLI scaffold
-- [ ] Basic codebase analysis (tree-sitter)
-- [ ] Context file generation
-- [ ] Template library
-- [ ] Quality scoring
-- [ ] Team sync (cloud)
+- [x] CLI with init, sync, decision, score
+- [x] Session save/resume
+- [x] MCP server
 - [ ] VS Code extension
-- [ ] Learning mode (APO-inspired optimization)
+- [ ] Team handoffs
+- [ ] Watch mode (auto-sync)
+- [ ] Git hooks
+- [ ] Template library
+- [ ] Learning mode (APO-inspired)
 
 ## Development
 
 ```bash
+# Clone
+git clone https://github.com/jitin-nhz/contextpilot.git
+cd contextpilot
+
 # Build
 go build -o contextpilot .
 
-# Run
-./contextpilot --help
-
 # Test
-go test ./...
+./contextpilot init --dry-run
 ```
 
 ## License
