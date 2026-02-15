@@ -2,11 +2,15 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+	"sort"
 
+	"github.com/jitin-nhz/contextpilot/internal/analyzer"
 	"github.com/spf13/cobra"
 )
 
 var initTemplate string
+var dryRun bool
 
 var initCmd = &cobra.Command{
 	Use:   "init",
@@ -18,22 +22,119 @@ var initCmd = &cobra.Command{
 
 The generated files help AI tools understand your project's
 tech stack, coding conventions, and architectural decisions.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("🔍 Analyzing codebase...")
-		// TODO: Implement codebase analysis
-		fmt.Println("   └── Analysis not yet implemented")
-		fmt.Println("")
-		fmt.Println("📝 This command will:")
-		fmt.Println("   ├── Detect tech stack (frameworks, languages, tools)")
-		fmt.Println("   ├── Analyze project structure and patterns")
-		fmt.Println("   ├── Generate .cursorrules, CLAUDE.md, copilot-instructions.md")
-		fmt.Println("   └── Create .contextpilot/config.yaml")
-		fmt.Println("")
-		fmt.Println("Coming in v1.0! Star us: github.com/jitin-nhz/contextpilot")
-	},
+	Run: runInit,
+}
+
+func runInit(cmd *cobra.Command, args []string) {
+	// Get current directory
+	cwd, err := os.Getwd()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "❌ Error getting current directory: %v\n", err)
+		os.Exit(1)
+	}
+
+	fmt.Println("🔍 Analyzing codebase...")
+
+	// Create analyzer and run analysis
+	a := analyzer.New(cwd)
+	analysis, err := a.Analyze()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "❌ Error analyzing codebase: %v\n", err)
+		os.Exit(1)
+	}
+
+	// Sort languages by file count
+	sort.Slice(analysis.Languages, func(i, j int) bool {
+		return analysis.Languages[i].FileCount > analysis.Languages[j].FileCount
+	})
+
+	// Display results
+	if len(analysis.Languages) > 0 {
+		fmt.Println("   ├── Languages detected:")
+		for i, lang := range analysis.Languages {
+			prefix := "│  ├──"
+			if i == len(analysis.Languages)-1 {
+				prefix = "│  └──"
+			}
+			fmt.Printf("   %s %s (%d files, %.1f%%)\n", prefix, lang.Name, lang.FileCount, lang.Percentage)
+		}
+	}
+
+	if analysis.Framework != nil {
+		fmt.Printf("   ├── Framework: %s", analysis.Framework.Name)
+		if analysis.Framework.Version != "" {
+			fmt.Printf(" %s", analysis.Framework.Version)
+		}
+		fmt.Println()
+	}
+
+	if analysis.Structure.Type != "" {
+		fmt.Printf("   ├── Structure: %s", analysis.Structure.Type)
+		if analysis.Structure.SrcDir != "" {
+			fmt.Printf(" (src: %s)", analysis.Structure.SrcDir)
+		}
+		fmt.Println()
+	}
+
+	if len(analysis.Structure.Folders) > 0 {
+		fmt.Printf("   ├── Folders: %v\n", analysis.Structure.Folders)
+	}
+
+	// Show detected patterns
+	patterns := []string{}
+	if analysis.Patterns.ORM != "" {
+		patterns = append(patterns, "ORM: "+analysis.Patterns.ORM)
+	}
+	if analysis.Patterns.TestFramework != "" {
+		patterns = append(patterns, "Tests: "+analysis.Patterns.TestFramework)
+	}
+	if analysis.Patterns.Styling != "" {
+		patterns = append(patterns, "Styling: "+analysis.Patterns.Styling)
+	}
+	if analysis.Patterns.StateManagement != "" {
+		patterns = append(patterns, "State: "+analysis.Patterns.StateManagement)
+	}
+	if analysis.Patterns.Linter != "" {
+		patterns = append(patterns, "Linter: "+analysis.Patterns.Linter)
+	}
+	if analysis.Patterns.Formatter != "" {
+		patterns = append(patterns, "Formatter: "+analysis.Patterns.Formatter)
+	}
+
+	if len(patterns) > 0 {
+		fmt.Println("   └── Patterns:")
+		for i, p := range patterns {
+			prefix := "      ├──"
+			if i == len(patterns)-1 {
+				prefix = "      └──"
+			}
+			fmt.Printf("   %s %s\n", prefix, p)
+		}
+	} else {
+		fmt.Println("   └── Analysis complete")
+	}
+
+	fmt.Println()
+
+	if dryRun {
+		fmt.Println("🔍 Dry run - no files written")
+		fmt.Println()
+		fmt.Println("Would generate:")
+		fmt.Println("   ├── .cursorrules")
+		fmt.Println("   ├── CLAUDE.md")
+		fmt.Println("   └── .github/copilot-instructions.md")
+		return
+	}
+
+	// TODO: Generate context files based on analysis
+	fmt.Println("📝 Context file generation coming next!")
+	fmt.Println("   Run with --dry-run to preview without writing files")
+	fmt.Println()
+	fmt.Println("Star us: github.com/jitin-nhz/contextpilot")
 }
 
 func init() {
 	rootCmd.AddCommand(initCmd)
 	initCmd.Flags().StringVarP(&initTemplate, "template", "t", "", "Use a specific template (e.g., nextjs-prisma)")
+	initCmd.Flags().BoolVar(&dryRun, "dry-run", false, "Preview analysis without generating files")
 }
