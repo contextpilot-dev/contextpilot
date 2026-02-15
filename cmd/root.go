@@ -20,11 +20,15 @@ var rootCmd = &cobra.Command{
 (.cursorrules, CLAUDE.md, copilot-instructions.md) so your
 AI coding tools actually understand your codebase.
 
-Quick start:
+Codebase Context:
   contextpilot init      Generate context files for current project
   contextpilot sync      Update context files after code changes
   contextpilot decision  Log architectural decisions
-  contextpilot score     Check your context quality`,
+  contextpilot score     Check your context quality
+
+Session Context:
+  contextpilot save      Save current work session
+  contextpilot resume    Restore session and copy to clipboard`,
 	Version: fmt.Sprintf("%s (commit: %s, built: %s)", Version, Commit, Date),
 }
 
