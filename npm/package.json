@@ -1,0 +1,42 @@
+{
+  "name": "contextpilot",
+  "version": "0.1.0",
+  "description": "Make every AI tool understand your codebase",
+  "keywords": [
+    "ai",
+    "context",
+    "cursor",
+    "claude",
+    "copilot",
+    "cursorrules",
+    "claude-md",
+    "ai-coding",
+    "developer-tools"
+  ],
+  "author": "Jitin Gambhir <jitin@ninehertz.com>",
+  "license": "MIT",
+  "homepage": "https://contextpilot.dev",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jitin-nhz/contextpilot.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jitin-nhz/contextpilot/issues"
+  },
+  "bin": {
+    "contextpilot": "./bin/contextpilot"
+  },
+  "scripts": {
+    "postinstall": "node scripts/install.js"
+  },
+  "engines": {
+    "node": ">=16"
+  },
+  "files": [
+    "bin/",
+    "scripts/"
+  ],
+  "dependencies": {
+    "tar": "^7.0.0"
+  }
+}

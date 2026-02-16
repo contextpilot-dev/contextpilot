@@ -42,14 +42,34 @@ $ contextpilot resume
 
 ## Installation
 
+### Quick Install (recommended)
+
 ```bash
-# Coming soon!
+curl -fsSL https://raw.githubusercontent.com/jitin-nhz/contextpilot/main/scripts/install.sh | sh
+```
+
+### Homebrew (macOS/Linux)
+
+```bash
+brew tap jitin-nhz/tap
 brew install contextpilot
-# or
-go install github.com/jitin-nhz/contextpilot@latest
-# or
+```
+
+### npm
+
+```bash
 npm install -g contextpilot
 ```
+
+### Go
+
+```bash
+go install github.com/jitin-nhz/contextpilot@latest
+```
+
+### Manual Download
+
+Download the latest release for your platform from [GitHub Releases](https://github.com/jitin-nhz/contextpilot/releases).
 
 ## Commands
 

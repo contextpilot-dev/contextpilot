@@ -1,0 +1,27 @@
+#!/usr/bin/env node
+
+const { spawn } = require('child_process');
+const path = require('path');
+const fs = require('fs');
+
+// Find the binary
+const binDir = path.join(__dirname);
+const platform = process.platform === 'win32' ? 'windows' : process.platform;
+const ext = platform === 'windows' ? '.exe' : '';
+const binaryPath = path.join(binDir, `contextpilot${ext}`);
+
+if (!fs.existsSync(binaryPath)) {
+  console.error('Error: contextpilot binary not found.');
+  console.error('Try reinstalling: npm install -g contextpilot');
+  process.exit(1);
+}
+
+// Spawn the binary with all arguments
+const child = spawn(binaryPath, process.argv.slice(2), {
+  stdio: 'inherit',
+  shell: false
+});
+
+child.on('exit', (code) => {
+  process.exit(code || 0);
+});
