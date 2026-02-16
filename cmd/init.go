@@ -18,7 +18,7 @@ var initCmd = &cobra.Command{
 	Short: "Generate context files for current project",
 	Long: `Analyze your codebase and generate AI context files:
   - .cursorrules (Cursor)
-  - CLAUDE.md (Claude Code)
+  - CLAUDE.md (Claude Code, OpenClaw)
   - .github/copilot-instructions.md (GitHub Copilot)
 
 The generated files help AI tools understand your project's
@@ -137,7 +137,7 @@ func runInit(cmd *cobra.Command, args []string) {
 	}
 
 	fmt.Println("   ├── .cursorrules (Cursor)")
-	fmt.Println("   ├── CLAUDE.md (Claude Code)")
+	fmt.Println("   ├── CLAUDE.md (Claude Code, OpenClaw)")
 	fmt.Println("   ├── .github/copilot-instructions.md (GitHub Copilot)")
 	fmt.Println("   └── .contextpilot/config.yaml (ContextPilot config)")
 	fmt.Println()
