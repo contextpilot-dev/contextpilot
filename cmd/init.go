@@ -148,7 +148,7 @@ func runInit(cmd *cobra.Command, args []string) {
 	fmt.Println("   • Run 'contextpilot sync' after major code changes")
 	fmt.Println("   • Log decisions with 'contextpilot decision \"...\"'")
 	fmt.Println()
-	fmt.Println("Star us: github.com/jitin-nhz/contextpilot")
+	fmt.Println("Star us: github.com/contextpilot-dev/contextpilot")
 }
 
 func init() {

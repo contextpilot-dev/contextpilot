@@ -1,6 +1,20 @@
-# ContextPilot
+<p align="center">
+  <img src="assets/logo/contextpilot-logo-main-2k.png" alt="ContextPilot Logo" width="200">
+</p>
 
-**Make every AI tool understand your codebase.**
+<h1 align="center">ContextPilot</h1>
+
+<p align="center">
+  <strong>Make every AI tool understand your codebase.</strong>
+</p>
+
+<p align="center">
+  <a href="https://github.com/contextpilot-dev/contextpilot/releases"><img src="https://img.shields.io/github/v/release/contextpilot-dev/contextpilot?style=flat-square" alt="Release"></a>
+  <a href="https://github.com/contextpilot-dev/contextpilot/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue?style=flat-square" alt="License"></a>
+  <a href="https://contextpilot.dev"><img src="https://img.shields.io/badge/website-contextpilot.dev-orange?style=flat-square" alt="Website"></a>
+</p>
+
+---
 
 ContextPilot generates and maintains AI context files (`.cursorrules`, `CLAUDE.md`, `copilot-instructions.md`) and tracks your work sessions so AI coding tools actually understand your project.
 
@@ -45,13 +59,13 @@ $ contextpilot resume
 ### Quick Install (recommended)
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/jitin-nhz/contextpilot/main/scripts/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/contextpilot-dev/contextpilot/main/scripts/install.sh | sh
 ```
 
 ### Homebrew (macOS/Linux)
 
 ```bash
-brew tap jitin-nhz/tap
+brew tap contextpilot-dev/tap
 brew install contextpilot
 ```
 
@@ -64,12 +78,12 @@ npm install -g contextpilot
 ### Go
 
 ```bash
-go install github.com/jitin-nhz/contextpilot@latest
+go install github.com/contextpilot-dev/contextpilot@latest
 ```
 
 ### Manual Download
 
-Download the latest release for your platform from [GitHub Releases](https://github.com/jitin-nhz/contextpilot/releases).
+Download the latest release for your platform from [GitHub Releases](https://github.com/contextpilot-dev/contextpilot/releases).
 
 ## Commands
 
@@ -180,7 +194,7 @@ Add to your MCP config:
 
 ```bash
 # Clone
-git clone https://github.com/jitin-nhz/contextpilot.git
+git clone https://github.com/contextpilot-dev/contextpilot.git
 cd contextpilot
 
 # Build
@@ -196,4 +210,8 @@ MIT
 
 ---
 
-**Built by [@jitin-nhz](https://github.com/jitin-nhz)** | [contextpilot.dev](https://contextpilot.dev)
+<p align="center">
+  <strong>Built by <a href="https://github.com/contextpilot-dev">ContextPilot Team</a></strong>
+  <br>
+  <a href="https://contextpilot.dev">contextpilot.dev</a>
+</p>

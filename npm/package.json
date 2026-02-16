@@ -18,10 +18,10 @@
   "homepage": "https://contextpilot.dev",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jitin-nhz/contextpilot.git"
+    "url": "git+https://github.com/contextpilot-dev/contextpilot.git"
   },
   "bugs": {
-    "url": "https://github.com/jitin-nhz/contextpilot/issues"
+    "url": "https://github.com/contextpilot-dev/contextpilot/issues"
   },
   "bin": {
     "contextpilot": "./bin/contextpilot"

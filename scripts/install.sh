@@ -1,11 +1,11 @@
 #!/bin/sh
 # ContextPilot installer
 # Usage: curl -fsSL https://contextpilot.dev/install.sh | sh
-#    or: curl -fsSL https://raw.githubusercontent.com/jitin-nhz/contextpilot/main/scripts/install.sh | sh
+#    or: curl -fsSL https://raw.githubusercontent.com/contextpilot-dev/contextpilot/main/scripts/install.sh | sh
 
 set -e
 
-REPO="jitin-nhz/contextpilot"
+REPO="contextpilot-dev/contextpilot"
 BINARY="contextpilot"
 INSTALL_DIR="${INSTALL_DIR:-/usr/local/bin}"
 

@@ -7,7 +7,7 @@ const { execSync } = require('child_process');
 const zlib = require('zlib');
 const tar = require('tar');
 
-const REPO = 'jitin-nhz/contextpilot';
+const REPO = 'contextpilot-dev/contextpilot';
 const BINARY_NAME = 'contextpilot';
 
 // Detect platform
